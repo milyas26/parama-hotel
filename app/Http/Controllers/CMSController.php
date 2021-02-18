@@ -324,9 +324,6 @@ class CMSController extends Controller
 		$dom = new \domdocument();
 		$dom->loadHtml($detail, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
 		$images = $dom->getelementsbytagname('img');
-
-        //loop over img elements, decode their base64 src and save them to public folder,
-        //and then replace base64 src with stored image URL.
         if($request->has($images))
         {
             foreach($images as $k => $img){

@@ -108,9 +108,8 @@ Route::get('/', function () {
     $header     = \App\Models\Header::first();
     $youtube    = \App\Models\Youtube::first();
     $gallery    = \App\Models\Gallery::where('category','=','gallery')->take(6)->get();
-    $youtube_all    = \App\Models\Youtube::all()->take(6);
 
-    return view('frontend.index', compact(['news','service','about','info','header','gallery','youtube','youtube_all']));
+    return view('frontend.index', compact(['news','service','about','info','header','youtube']));
 });
 
 Route::get('/units', function () {
