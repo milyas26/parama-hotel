@@ -1,4 +1,5 @@
 @extends('dashboard.template.home')
+@section('subjudul', 'SELAMAT DATANG')
 
 @section('content')
     <div class="container">

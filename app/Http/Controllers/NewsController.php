@@ -15,7 +15,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        if(Auth::check()) {
+        if (Auth::check()) {
             $news = News::all();
             $auth = auth()->user()->role_id;
             return view('dashboard.pages.news.index', compact('news', 'auth'));
@@ -40,19 +40,19 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-         $this->validate($request, [
+        $this->validate($request, [
             'title' => 'required',
             'description' => 'required',
             'image' => 'required',
         ]);
 
         $gambar = $request->image;
-        $new_gambar = time().$gambar->getClientOriginalName();
+        $new_gambar = time() . $gambar->getClientOriginalName();
 
         $post = News::create([
             'title' => $request->title,
             'description' => $request->description,
-            'image' => 'public/uploads/posts/'.$new_gambar,
+            'image' => 'public/uploads/posts/' . $new_gambar,
         ]);
 
         $gambar->move('public/uploads/posts/', $new_gambar);
@@ -100,17 +100,17 @@ class NewsController extends Controller
         ]);
 
         $news = News::findorfail($id);
-        if($request->has('image')) {
+        if ($request->has('image')) {
             $gambar = $request->image;
-            $new_gambar = time().$gambar->getClientOriginalName();
+            $new_gambar = time() . $gambar->getClientOriginalName();
             $gambar->move('public/uploads/posts/', $new_gambar);
 
             $news_data = [
-            'title' => $request->title,
-            'description' => $request->description,
-            'image' => 'public/uploads/posts/'.$new_gambar,
+                'title' => $request->title,
+                'description' => $request->description,
+                'image' => 'public/uploads/posts/' . $new_gambar,
             ];
-        } else  {
+        } else {
             $news_data = [
                 'title' => $request->title,
                 'description' => $request->description,

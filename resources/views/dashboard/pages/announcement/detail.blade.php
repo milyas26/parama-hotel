@@ -21,7 +21,7 @@
       </div>
     @endif
     <!-- DataTales Example -->
-    <div class="card shadow mb-4">
+    <div class="card mb-4">
         <div class="card-body p-5">
             @if ($announcement->image == null)
             <img src="{{url('backend/img/default-news.svg')}}" class="card-img-top mx-auto" style="max-height: 500px;" alt="">

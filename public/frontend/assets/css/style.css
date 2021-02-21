@@ -437,7 +437,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #hero h2 {
-  color: #6f6f6f;
+  color: #f4f4f4;
   margin: 10px 0 0 0;
   font-size: 22px;
 }
@@ -1313,4 +1313,8 @@ section {
   overflow: hidden;
   text-overflow: ellipsis;
 
+}
+
+.card .card-body ul li img {
+  max-width: 300px;
 }

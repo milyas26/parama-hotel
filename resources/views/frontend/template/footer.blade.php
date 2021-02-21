@@ -1,9 +1,13 @@
+    @php
+        $contact = \App\Models\Contact::first();
+    @endphp
+
 <!-- ======= Footer ======= -->
   <div class="bg-dark">
-    <div class="container py-3">
+    <div class="container pt-3">
       <div class="row">
         <div class="col-4" style="text-align: left">
-          <h4 class="text-white" style="text-transform: uppercase">Apartemen Parama</h4>
+          <h4 class="text-white" style="text-transform: uppercase">{{ $contact->title }}</h4>
           <p style="color: #a5a5a5">Dengan kemudahan akses, lokasi strategis, dan kelengkapan fasilitas yang dimiliki, Apartemen Parama layak dipertimbangkan sebagai lokasi hunian ideal.</p>
         </div>
         <div class="col-4">
@@ -23,17 +27,17 @@
               <div class="info">
                 <div class="address d-flex">
                   <i style="color: #34B7A7; font-size: 25px; margin-right: 10px" class="icofont-google-map"></i>
-                  <p style="color: #a5a5a5" style="margin: 0">Jl. H Kavling Jl. R.A.Kartini No.6, RT.16/RW.6, Cilandak Bar., Kec. Cilandak, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12430</p>
+                  <p style="color: #a5a5a5" style="margin: 0">{{ $contact->address }}</p>
                 </div>
 
                 <div class="email d-flex">
                   <i class="icofont-envelope" style="color: #34B7A7; font-size: 25px; margin-right: 10px"></i>
-                  <p style="color: #a5a5a5" style="margin: 0">paramaapartement@gmail.com</p>
+                  <p style="color: #a5a5a5" style="margin: 0">{{ $contact->email }}</p>
                 </div>
 
                 <div class="phone d-flex">
                   <i class="icofont-phone" style="color: #34B7A7; font-size: 25px; margin-right: 10px"></i>
-                  <p style="color: #a5a5a5" style="margin: 0">08118133388</p>
+                  <p style="color: #a5a5a5" style="margin: 0">{{ $contact->phone }}</p>
                 </div>
               </div>
         </div>

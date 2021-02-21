@@ -31,16 +31,15 @@ class CMSController extends Controller
 
         $contact = Contact::all();
         return view('dashboard.pages.cms.contact.index', compact('contact'));
-
     }
 
     public function createContact()
     {
-        if(Auth::check()) {
-            if(auth()->user()->role_id == 1) {
+        if (Auth::check()) {
+            if (auth()->user()->role_id == 1) {
                 return view('dashboard.pages.cms.contact.create');
-            }else{
-                return redirect('user')->with('error',"Sorry, can't access this page!");
+            } else {
+                return redirect('user')->with('error', "Sorry, can't access this page!");
             }
         }
     }
@@ -109,16 +108,15 @@ class CMSController extends Controller
 
         $header = Header::all();
         return view('dashboard.pages.cms.header.index', compact('header'));
-
     }
 
     public function createHeader(Request $request)
     {
-        if(Auth::check()) {
-            if(auth()->user()->role_id == 1) {
+        if (Auth::check()) {
+            if (auth()->user()->role_id == 1) {
                 return view('dashboard.pages.cms.header.create');
-            }else{
-                return redirect('user')->with('error',"Sorry, can't access this page!");
+            } else {
+                return redirect('user')->with('error', "Sorry, can't access this page!");
             }
         }
     }
@@ -176,16 +174,15 @@ class CMSController extends Controller
 
         $service = Service::all();
         return view('dashboard.pages.cms.service.index', compact('service'));
-
     }
 
     public function createService()
     {
-        if(Auth::check()) {
-            if(auth()->user()->role_id == 1) {
+        if (Auth::check()) {
+            if (auth()->user()->role_id == 1) {
                 return view('dashboard.pages.cms.service.create');
-            }else{
-                return redirect('user')->with('error',"Sorry, can't access this page!");
+            } else {
+                return redirect('user')->with('error', "Sorry, can't access this page!");
             }
         }
     }
@@ -199,12 +196,12 @@ class CMSController extends Controller
         ]);
 
         $gambar = $request->image;
-        $new_gambar = time().$gambar->getClientOriginalName();
+        $new_gambar = time() . $gambar->getClientOriginalName();
 
         $service = Service::create([
             'title' => $request->title,
             'description' => $request->description,
-            'image' => 'public/uploads/posts/'.$new_gambar,
+            'image' => 'public/uploads/posts/' . $new_gambar,
         ]);
 
         $gambar->move('public/uploads/posts/', $new_gambar);
@@ -225,17 +222,17 @@ class CMSController extends Controller
         ]);
 
         $service = Service::findorfail($id);
-        if($request->has('image')) {
+        if ($request->has('image')) {
             $gambar = $request->image;
-            $new_gambar = time().$gambar->getClientOriginalName();
+            $new_gambar = time() . $gambar->getClientOriginalName();
             $gambar->move('public/uploads/posts/', $new_gambar);
 
             $service_data = [
-            'title' => $request->title,
-            'description' => $request->description,
-            'image' => 'public/uploads/posts/'.$new_gambar,
+                'title' => $request->title,
+                'description' => $request->description,
+                'image' => 'public/uploads/posts/' . $new_gambar,
             ];
-        } else  {
+        } else {
             $service_data = [
                 'title' => $request->title,
                 'description' => $request->description,
@@ -260,16 +257,15 @@ class CMSController extends Controller
 
         $about = About::all();
         return view('dashboard.pages.cms.about.index', compact('about'));
-
     }
 
     public function createAbout()
     {
-        if(Auth::check()) {
-            if(auth()->user()->role_id == 1) {
+        if (Auth::check()) {
+            if (auth()->user()->role_id == 1) {
                 return view('dashboard.pages.cms.about.create');
-            }else{
-                return redirect('user')->with('error',"Sorry, can't access this page!");
+            } else {
+                return redirect('user')->with('error', "Sorry, can't access this page!");
             }
         }
     }
@@ -279,17 +275,17 @@ class CMSController extends Controller
         $detail = $request->description;
 
         $dom = new \domdocument();
-		$dom->loadHtml($detail, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
-		$images = $dom->getelementsbytagname('img');
+        $dom->loadHtml($detail, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
+        $images = $dom->getelementsbytagname('img');
 
-        foreach($images as $k => $img){
+        foreach ($images as $k => $img) {
             $data = $img->getattribute('src');
 
             list($type, $data) = explode(';', $data);
             list(, $data)      = explode(',', $data);
 
             $data = base64_decode($data);
-            $image_name= 'public/uploads/about/'.str_slug($request->title).'.png';
+            $image_name = 'public/uploads/about/' . str_slug($request->title) . '.png';
             $path = public_path() . $image_name;
 
             file_put_contents($path, $data);
@@ -299,17 +295,17 @@ class CMSController extends Controller
         }
 
         $gambar = $request->image;
-        $new_gambar = time().$gambar->getClientOriginalName();
-        
+        $new_gambar = time() . $gambar->getClientOriginalName();
+
         $detail = $dom->savehtml();
         $about = new About;
-        $about->image        = 'public/uploads/posts/'.$new_gambar;
+        $about->image        = 'public/uploads/posts/' . $new_gambar;
         $about->description  = $detail;
         $about->save();
 
         $gambar->move('public/uploads/posts/', $new_gambar);
 
-        return redirect('cms/about')->with('add','Add About Successfully');
+        return redirect('cms/about')->with('add', 'Add About Successfully');
     }
     public function editAbout($id)
     {
@@ -321,19 +317,18 @@ class CMSController extends Controller
     {
         $detail = $request->description;
 
-		$dom = new \domdocument();
-		$dom->loadHtml($detail, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
-		$images = $dom->getelementsbytagname('img');
-        if($request->has($images))
-        {
-            foreach($images as $k => $img){
+        $dom = new \domdocument();
+        $dom->loadHtml($detail, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING);
+        $images = $dom->getelementsbytagname('img');
+        if ($request->has($images)) {
+            foreach ($images as $k => $img) {
                 $data = $img->getattribute('src');
 
                 list($type, $data) = explode(';', $data);
                 list(, $data)      = explode(',', $data);
 
                 $data = base64_decode($data);
-                $image_name= 'public/uploads/about/'.str_slug($request->title).'.png';
+                $image_name = 'public/uploads/about/' . str_slug($request->title) . '.png';
                 $path = public_path() . $image_name;
 
                 file_put_contents($path, $data);
@@ -344,17 +339,17 @@ class CMSController extends Controller
         }
 
         $gambar = $request->image;
-        $new_gambar = time().$gambar->getClientOriginalName();
+        $new_gambar = time() . $gambar->getClientOriginalName();
 
         $detail = $dom->savehtml();
         $about = About::find($id);
-        $about->image        = $request->image ? 'public/uploads/posts/'.$new_gambar : $about->image;
+        $about->image        = $request->image ? 'public/uploads/posts/' . $new_gambar : $about->image;
         $about->description  = $detail;
         $about->save();
 
         $gambar->move('public/uploads/posts/', $new_gambar);
 
-        return redirect('cms/about')->with('add','Update Data Successfully');
+        return redirect('cms/about')->with('add', 'Update Data Successfully');
     }
     public function destroyAbout($id)
     {
@@ -371,7 +366,6 @@ class CMSController extends Controller
 
         $info = Info::all();
         return view('dashboard.pages.cms.info.index', compact('info'));
-
     }
 
     public function createInfo()
@@ -388,12 +382,12 @@ class CMSController extends Controller
         ]);
 
         $gambar = $request->image;
-        $new_gambar = time().$gambar->getClientOriginalName();
+        $new_gambar = time() . $gambar->getClientOriginalName();
 
         $post = Info::create([
             'title' => $request->title,
             'description' => $request->description,
-            'image' => 'public/uploads/posts/'.$new_gambar,
+            'image' => 'public/uploads/posts/' . $new_gambar,
         ]);
 
         $gambar->move('public/uploads/posts/', $new_gambar);
@@ -414,17 +408,17 @@ class CMSController extends Controller
         ]);
 
         $news = Info::findorfail($id);
-        if($request->has('image')) {
+        if ($request->has('image')) {
             $gambar = $request->image;
-            $new_gambar = time().$gambar->getClientOriginalName();
+            $new_gambar = time() . $gambar->getClientOriginalName();
             $gambar->move('public/uploads/posts/', $new_gambar);
 
             $news_data = [
-            'title' => $request->title,
-            'description' => $request->description,
-            'image' => 'public/uploads/posts/'.$new_gambar,
+                'title' => $request->title,
+                'description' => $request->description,
+                'image' => 'public/uploads/posts/' . $new_gambar,
             ];
-        } else  {
+        } else {
             $news_data = [
                 'title' => $request->title,
                 'description' => $request->description,
@@ -449,7 +443,6 @@ class CMSController extends Controller
 
         $unit = Unit::all();
         return view('dashboard.pages.cms.unit.index', compact('unit'));
-
     }
 
     public function createUnit()
@@ -457,21 +450,119 @@ class CMSController extends Controller
         return view('dashboard.pages.cms.unit.create');
     }
 
-    public function storeUnit()
+    public function storeUnit(Request $request)
     {
-        // 
+        // ADD TO UNIT
+        $unit = new Unit;
+        $codeunit = $request->floor == "1-16" ? $request->unit1 : $request->unit2;
+        $gambar = $request->image;
+        $new_gambar = time() . $gambar->getClientOriginalName();
+        $unit_id = Unit::createId();
+
+        $unit = Unit::create([
+            'id' => $unit_id,
+            'title' => $request->title,
+            'description' => $request->description,
+            'floor' => $request->floor,
+            'unit' => $codeunit,
+            'large' => $request->large,
+            'image' => 'public/uploads/unit/' . $new_gambar,
+        ]);
+
+        // ADD TO GALLERY
+        if ($codeunit == "A-B") {
+            $category = "unit/A-B";
+        } elseif ($codeunit == "C-D") {
+            $category = "unit/C-D";
+        } elseif ($codeunit == "E-F") {
+            $category = "unit/E-F";
+        } elseif ($codeunit == "A") {
+            $category = "unit/A";
+        } elseif ($codeunit == "B") {
+            $category = "unit/B";
+        } elseif ($codeunit == "C") {
+            $category = "unit/C";
+        }
+
+        $gambar->move('public/uploads/unit/', $new_gambar);
+
+        $gallery_id             = Gallery::createID();
+        $gallery                = new Gallery;
+        $gallery->id            = $gallery_id;
+        $gallery->unit_id       = $unit_id;
+        $gallery->title         = $request->title;
+        $gallery->image         = 'public/uploads/unit/' . $new_gambar;
+        $gallery->category      = $category;
+        $gallery->save();
+
+        return redirect('cms/unit')->with('success', 'Unit berhasil ditambahkan');
     }
-    public function editUnit()
+    public function editUnit($id)
     {
-        // 
+        $unit = Unit::findorfail($id);
+
+        return view('dashboard.pages.cms.unit.edit', compact('unit'));
     }
-    public function updateUnit()
+    public function updateUnit(Request $request, $id)
     {
-        // 
+        // UPDATE UNIT
+        $unit = Unit::findorfail($id);
+        $codeunit = $request->floor == "1-16" ? $request->unit1 : $request->unit2;
+        $gambar = $request->image;
+        $new_gambar = time() . $gambar->getClientOriginalName();
+
+        $unit_data = [
+            'id' => $unit->id,
+            'title' => $request->title,
+            'description' => $request->description,
+            'floor' => $request->floor,
+            'unit' => $codeunit,
+            'large' => $request->large,
+            'image' => $request->image ? 'public/uploads/unit/' . $new_gambar : $unit->image,
+        ];
+
+        $unit->update($unit_data);
+
+        // UPDATE GALLERY
+        if ($codeunit == "A-B") {
+            $category = "unit/A-B";
+        } elseif ($codeunit == "C-D") {
+            $category = "unit/C-D";
+        } elseif ($codeunit == "E-F") {
+            $category = "unit/E-F";
+        } elseif ($codeunit == "A") {
+            $category = "unit/A";
+        } elseif ($codeunit == "B") {
+            $category = "unit/B";
+        } elseif ($codeunit == "C") {
+            $category = "unit/C";
+        }
+
+        $gambar->move('public/uploads/unit/', $new_gambar);
+
+        $gallery                = Gallery::where('unit_id', $id);
+        $gallery_data = [
+            'unit_id'       => $unit->id,
+            'title'         => $request->title,
+            'image'         => $request->image ? 'public/uploads/unit/' . $new_gambar : $unit->image,
+            'category'      => $category,
+        ];
+        $gallery->update($gallery_data);
+
+        return redirect('cms/unit')->with('success', 'Unit berhasil diubah');
     }
-    public function destroyUnit()
+    public function destroyUnit($id)
     {
-        // 
+        $unit = Unit::where('id', $id)->first();
+        $gallery = Gallery::where('unit_id', $id)->first();
+
+        File::delete($unit->image);
+        File::delete($gallery->image);
+
+        $unit->delete();
+        $gallery->delete();
+
+        return redirect('cms/unit')->with('delete', 'Delete Data Successfully');
     }
 
     // FASILITIES
@@ -480,7 +571,6 @@ class CMSController extends Controller
 
         $facilities = Facilities::all();
         return view('dashboard.pages.cms.facilities.index', compact('facilities'));
-
     }
 
     public function createFacilities()
@@ -494,11 +584,11 @@ class CMSController extends Controller
         $facilities = new Facilities;
 
         $gambar = $request->image;
-        $new_gambar = time().$gambar->getClientOriginalName();
-        
+        $new_gambar = time() . $gambar->getClientOriginalName();
+
         $facilities->id = $facilities_id;
         $facilities->title = $request->title;
-        $facilities->image = 'public/uploads/facilities/'.$new_gambar;
+        $facilities->image = 'public/uploads/facilities/' . $new_gambar;
         $facilities->description = $request->description;
         $facilities->save();
 
@@ -510,11 +600,11 @@ class CMSController extends Controller
         $gallery->id            = $gallery_id;
         $gallery->facilities_id = $facilities_id;
         $gallery->title         = $request->title;
-        $gallery->image         = 'public/uploads/facilities/'.$new_gambar;
+        $gallery->image         = 'public/uploads/facilities/' . $new_gambar;
         $gallery->category      = $request->category;
         $gallery->save();
 
-        return redirect('cms/facilities')->with('add','Create Service Successfully');
+        return redirect('cms/facilities')->with('add', 'Create Service Successfully');
     }
     public function editFacilities($id)
     {
@@ -526,20 +616,19 @@ class CMSController extends Controller
     {
         $facilities = Facilities::findorfail($id);
 
-        if($request->has('image')) {
+        if ($request->has('image')) {
             // unlink($facilities->image);
 
             $gambar = $request->image;
-            $new_gambar = time().$gambar->getClientOriginalName();
+            $new_gambar = time() . $gambar->getClientOriginalName();
             $gambar->move('public/uploads/facilities/', $new_gambar);
-            
-            $facilities_data = [
-            'title' => $request->title,
-            'description' => $request->description,
-            'image' => 'public/uploads/facilities/'. $new_gambar,
-            ];
 
-        } else  {
+            $facilities_data = [
+                'title' => $request->title,
+                'description' => $request->description,
+                'image' => 'public/uploads/facilities/' . $new_gambar,
+            ];
+        } else {
             $facilities_data = [
                 'title' => $request->title,
                 'description' => $request->description,
@@ -548,21 +637,21 @@ class CMSController extends Controller
 
         $facilities->update($facilities_data);
 
-        return redirect('cms/facilities')->with('success','Update facilities Successfully');
+        return redirect('cms/facilities')->with('success', 'Update facilities Successfully');
     }
 
     public function destroyFacilities($id)
     {
-		$facilities = Facilities::where('id',$id)->first();
-		$gallery = Gallery::where('facilities_id',$id)->first();
+        $facilities = Facilities::where('id', $id)->first();
+        $gallery = Gallery::where('facilities_id', $id)->first();
 
-		File::delete($facilities->image);
-		File::delete($gallery->image);
+        File::delete($facilities->image);
+        File::delete($gallery->image);
 
-        Facilities::where('id',$id)->delete();
-        Gallery::where('facilities_id',$id)->delete();
+        Facilities::where('id', $id)->delete();
+        Gallery::where('facilities_id', $id)->delete();
 
-        return redirect('cms/facilities')->with('delete','Delete Data Successfully');
+        return redirect('cms/facilities')->with('delete', 'Delete Data Successfully');
     }
 
     // Gallery
@@ -571,7 +660,6 @@ class CMSController extends Controller
 
         $gallery = Gallery::all();
         return view('dashboard.pages.cms.gallery.index', compact('gallery'));
-
     }
 
     public function createGallery()

@@ -44,13 +44,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function role()
-    {
+    public function role(){
         return $this->belongsTo(Role::class);
     }
 
-     public static function createID()
-    {
+    public function complain(){
+        return $this->hasMany(Complaint::class);
+    }
+
+    public function comment(){
+        return $this->hasMany(Comment::class);
+    }
+
+     public static function createID(){
         while(true){
             $id = rand(10, 3000);
             $check = User::find($id);

@@ -9,7 +9,7 @@
                     <i class="fa fa-users" style="font-size: 80px; color: #36b9cc"></i>
                 </div>
                 <div class="card-body" style="text-align: center">
-                    <h4>Users</h4>
+                    <h4>Users {{ $user }}</h4>
                 </div>
             </div>
         </div>
@@ -19,7 +19,7 @@
                     <i class="fas fa-newspaper" style="font-size: 80px; color: #1cc88a"></i>
                 </div>
                 <div class="card-body" style="text-align: center">
-                    <h4>Announcements</h4>
+                    <h4>Announcements {{ $announcement }}</h4>
                 </div>
             </div>
         </div>
@@ -29,7 +29,7 @@
                     <i class="fa fa-money-bill-wave" style="font-size: 80px; color: #f6c23e "></i>
                 </div>
                 <div class="card-body" style="text-align: center">
-                    <h4>Bills</h4>
+                    <h4>Bills {{ $bill }}</h4>
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
                     <i class="fa fa-question-circle" style="font-size: 80px; color: #e74a3b"></i>
                 </div>
                 <div class="card-body" style="text-align: center">
-                    <h4>Complaints</h4>
+                    <h4>Complaints {{ $complain }}</h4>
                 </div>
             </div>
         </div>

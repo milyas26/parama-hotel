@@ -1,6 +1,12 @@
 <?php
 
+use App\Models\Announcement;
+use App\Models\Bill;
+use App\Models\Complaint;
 use Illuminate\Support\Facades\Route;
+use App\Models\Unit;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,17 +25,25 @@ Auth::routes();
 // =========================================
 // DASHBOARD ADMIN
 // =========================================
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    
+
     Route::get('/dashboard', function () {
-        return view('dashboard.pages.index');
+        $user = User::all()->count();
+        $announcement = Announcement::all()->count();
+        $bill = Bill::all()->count();
+        $complain = Complaint::all()->count();
+        return view('dashboard.pages.index', compact('user', 'announcement', 'bill', 'complain'));
     });
 
     Route::resource('/news', 'App\Http\Controllers\NewsController');
+    Route::resource('/complaint', 'App\Http\Controllers\ComplaintController');
+    Route::resource('/comment', 'App\Http\Controllers\CommentController');
     Route::resource('/youtube', 'App\Http\Controllers\YoutubeController');
     Route::resource('/announcement', 'App\Http\Controllers\AnnouncementController');
     Route::resource('/user', 'App\Http\Controllers\UserController');
+    Route::resource('/bill', 'App\Http\Controllers\BillController');
+    Route::resource('/sto', 'App\Http\Controllers\STOController');
 
     // -- Section Contact --
     Route::get('/cms/contact', 'App\Http\Controllers\CMSController@contact')->name('contact.index');
@@ -47,7 +61,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::put('/cms/header/{header}/update', 'App\Http\Controllers\CMSController@updateHeader')->name('header.update');
     Route::delete('/cms/header/{header}/destroy', 'App\Http\Controllers\CMSController@destroyHeader')->name('header.destroy');
 
-     // -- Section Service --
+    // -- Section Service --
     Route::get('/cms/service', 'App\Http\Controllers\CMSController@service')->name('service.index');
     Route::get('/cms/service/create', 'App\Http\Controllers\CMSController@createService')->name('service.create');
     Route::post('/cms/service/create', 'App\Http\Controllers\CMSController@storeService')->name('service.store');
@@ -101,19 +115,27 @@ Route::group(['middleware' => 'auth'], function(){
 // VIEW FRONTEND
 // =========================================
 Route::get('/', function () {
-    $news       = \App\Models\News::orderBy('created_at','desc')->take(3)->get();
+    $news       = \App\Models\News::orderBy('created_at', 'desc')->take(3)->get();
     $service    = \App\Models\Service::all();
     $about      = \App\Models\About::first();
     $info       = \App\Models\Info::all();
     $header     = \App\Models\Header::first();
     $youtube    = \App\Models\Youtube::first();
-    $gallery    = \App\Models\Gallery::where('category','=','gallery')->take(6)->get();
+    $gallery    = \App\Models\Gallery::where('category', '=', 'gallery')->take(6)->get();
 
-    return view('frontend.index', compact(['news','service','about','info','header','youtube']));
+    return view('frontend.index', compact(['news', 'service', 'about', 'info', 'header', 'youtube']));
 });
 
 Route::get('/units', function () {
-    return view('frontend.units');
+    $unitA = Unit::where('floor', '=', '17-18')->where('unit', '=', 'A')->first();
+    $unitB = Unit::where('floor', '=', '17-18')->where('unit', '=', 'B')->first();
+    $unitC = Unit::where('floor', '=', '17-18')->where('unit', '=', 'C')->first();
+    $unitAB = Unit::where('floor', '=', '1-16')->where('unit', '=', 'A-B')->first();
+    $unitCD = Unit::where('floor', '=', '1-16')->where('unit', '=', 'C-D')->first();
+    $unitEF = Unit::where('floor', '=', '1-16')->where('unit', '=', 'E-F')->first();
+
+    // dd($unitA, $unitB, $unitC, $unitAB, $unitCD, $unitEF);
+    return view('frontend.units', compact('unitA', 'unitB', 'unitC', 'unitAB', 'unitCD', 'unitEF'));
 });
 
 Route::get('/facilities', function () {
@@ -127,7 +149,7 @@ Route::get('/information', function () {
 });
 Route::get('/detail-news/{id}', function ($id) {
     $news       = \App\Models\News::findorfail($id);
-    $allNews       = \App\Models\News::orderBy('created_at','desc')->take(4)->get();
+    $allNews       = \App\Models\News::orderBy('created_at', 'desc')->take(4)->get();
     return view('frontend.detail_news', compact('news', 'allNews'));
 });
 
@@ -148,7 +170,7 @@ Route::get('/about', function () {
     $about      = \App\Models\About::first();
     $info       = \App\Models\Info::all();
     $youtube    = \App\Models\Youtube::first();
-    return view('frontend.about', compact(['service','about','info', 'youtube']));
+    return view('frontend.about', compact(['service', 'about', 'info', 'youtube']));
 });
 
 Route::get('/contact-us', function () {

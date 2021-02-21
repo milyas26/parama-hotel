@@ -21,7 +21,7 @@ class Gallery extends Model
     {
         while(true){
             $id = Str::uuid();
-            $check = Facilities::find($id);
+            $check = Gallery::find($id);
             if(!$check) return $id;
             else continue;
         }
